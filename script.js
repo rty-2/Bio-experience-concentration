@@ -3,12 +3,16 @@ const frame_time = 500;
 const cycle_time = 2000;
 const tot_frames = cycle_time/frame_time;
 const colors = ["red","green","blue","white","yellow","orange","cyan","purple","magenta","pink","brown","aqua","crimson","fuchsia","gold","lime","olive","sienna","teal","turquoise",]
+const display = document.getElementById("screen");
+const context = display.getContext("2d");
+const square_size = 50;
+const square_x = (canvas.width/2)+(square_size/2)
+const square_y = (canvas.height/2)+(square_size/2)
 
 //variables
-let display = document.getElementById("screen");
-let context = display.getContext("2d");
 let frame = 0;
 let class_init = true;
+let square1 = new Square ();
 
 canvas.width = 700;
 canvas.height = 500;
@@ -57,10 +61,6 @@ function loop(){
 
 function test(){
 
-}
-
-function initialize(){
-  
 }
 
 //main
