@@ -12,29 +12,28 @@ const square_y = (canvas.height/2)+(square_size/2)
 //variables
 let frame = 0;
 let class_init = true;
-let square1 = new Square ();
+let square1 = new Square (square_x,square_y,square_size);
 
 canvas.width = 700;
 canvas.height = 500;
 canvas.style.width = '100%';
 canvas.style.height = '100%';
-context.fillStyle = "red";
-context.fillRect(10, 10, 200, 200);
+//context.fillStyle = "red";
+//context.fillRect(10, 10, 200, 200);
 
 //classes
 class Square {
-  constructor(posx,posy,sizex,sizey){
+  constructor(posx,posy,size){
     this.posx = posx;
     this.posy = posy;
-    this.sizex = sizex;
-    this.sizey = sizey;
+    this.size = size;
     this.col = "";
   }
 
   draw(){
     this.#select_color();
     context.fillStyle(col);
-    display.fillRect(this.posx,this.posy,this.sizex,this.sizey);
+    display.fillRect(this.posx,this.posy,this.size,this.size);
   }
 
   erase(){
@@ -65,3 +64,4 @@ function test(){
 
 //main
 alert("test");
+square1.draw();
