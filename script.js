@@ -3,46 +3,76 @@ const frame_time = 500;
 const cycle_time = 2000;
 const tot_frames = cycle_time/frame_time;
 const colors = ["red","green","blue","white","yellow","orange","cyan","purple","magenta","pink","brown","aqua","crimson","fuchsia","gold","lime","olive","sienna","teal","turquoise",]
-const display = document.getElementById("screen");
-const context = display.getContext("2d");
-const square_size = 50;
-const square_x = (canvas.width/2)+(square_size/2)
-const square_y = (canvas.height/2)+(square_size/2)
 
 //variables
 let frame = 0;
-let class_init = true;
-let square1 = new Square (square_x,square_y,square_size);
-
-canvas.width = 700;
-canvas.height = 500;
-canvas.style.width = '100%';
-canvas.style.height = '100%';
-//context.fillStyle = "red";
-//context.fillRect(10, 10, 200, 200);
 
 //classes
-class Square {
-  constructor(posx,posy,size){
-    this.posx = posx;
-    this.posy = posy;
-    this.size = size;
-    this.col = "";
+class Display {
+  constructor(name,sizex = '100%',sizey = '100%'){
+    this.name = name;
+    this.properties;
+    this.sizex = sizex;
+    this.sizey = sizey;
+    this.output;
+    this.context;
   }
 
-  draw(){
-    this.#select_color();
-    context.fillStyle(col);
-    display.fillRect(this.posx,this.posy,this.size,this.size);
+  get_properties(type){
+    this.properties = this.output.getBoundingClientRect();
+    return(this.properties[type]);
+  }
+
+  init_canvas(){
+    this.output.style.width = this.sizex;
+    this.output.style.height = this.sizey;
+    this.output.width = this.get_properties("width");
+    this.output.height = this.get_properties("height");
+    this.context = this.output.getContext("2d");
+  }
+
+  link_canvas(){
+    this.output = document.getElementById(this.name);
+    this.init_canvas();
+  }
+}
+
+class Square {
+  constructor(display,frac){
+    this.display = display;
+    this.display_height = this.display.get_properties("height");
+    this.display_width = this.display.get_properties("width");
+    this.sizex = Math.floor(this.display_height/frac);
+    this.sizey = Math.floor(this.display_width/frac);
+    this.posx = Math.floor(frac/2)*this.sizex;
+    this.posy = Math.floor(frac/2)*this.sizey;
+    this.col = "";
+    this.test = 0;
+  }
+
+  draw(rng = true){
+    if(rng){
+      this.#select_color();
+    }
+    else {
+      this.#test_color();
+    }
+    this.display.context.fillStyle = this.col;
+    this.display.context.fillRect(this.posx,this.posy,this.sizex,this.sizey);
   }
 
   erase(){
-    display.fillRect(0,0,display.width,display.height);
+    context.fillRect(0,0,display.width,display.height);
   }
 
   #select_color(){
-    let num = Math.floor((Math.random()*colors.length())+1);
-    col = colors[num];
+    let num = Math.floor((Math.random()*colors.length)+1);
+    this.col = colors[num];
+  }
+
+  #test_color(){
+    this.col = colors[this.test];
+    this.test = (this.test + 1)%colors.length;
   }
 }
 
@@ -61,7 +91,8 @@ function loop(){
 function test(){
 
 }
-
+let display1 = new Display("screen")
+display1.link_canvas();
+let square1 = new Square (display1,5);
 //main
-alert("test");
 square1.draw();
