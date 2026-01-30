@@ -7,11 +7,9 @@ const colors = [
   "yellow",
   "orange",
   "purple",
-  "brown",
   "fuchsia",
   "gold",
   "lime",
-  "sienna",
   "teal",
   "turquoise",
 ];
