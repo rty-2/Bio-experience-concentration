@@ -8,7 +8,6 @@ const colors = [
   "orange",
   "purple",
   "brown",
-  "crimson",
   "fuchsia",
   "gold",
   "lime",
