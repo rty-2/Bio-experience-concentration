@@ -211,7 +211,7 @@ function check_col(is_target) {
 }
 
 function reset() {
-  armed = false;
+  armed = true;
   active = false;
   col_on = false;
   input = false;
