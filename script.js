@@ -1,7 +1,4 @@
 //constants
-const frame_time = 250;
-const cycle_time = 1500;
-const tot_frames = cycle_time / frame_time;
 const colors = [
   "red",
   "green",
@@ -20,7 +17,6 @@ const colors = [
   "turquoise",
 ];
 const text_col = ["red", "white"];
-const prop = 13;
 
 //variables
 let frame = 0;
@@ -29,13 +25,20 @@ let armed = false;
 let active = false;
 let col_on = false;
 let input = false;
-let miss_counter = 0;
+let other_miss = 0;
+let timeout = 0;
+let hit_miss = 0;
 let other_hits = 0;
 let target_hits = 0;
 let text_col_state = 0;
 let target_col = "red";
 let key_hit = 0;
 let total = 0;
+let frame_time = 250;
+let cycle_time = 1500;
+let tot_frames = cycle_time / frame_time;
+let prop = 13;
+let results = [];
 
 //cancas init
 let canvas = document.getElementById("screen");
@@ -86,6 +89,38 @@ class Square {
   }
 }
 
+class Save {
+  constructor(
+    a,
+    act,
+    o_ms,
+    h_ms,
+    tout,
+    o_ht,
+    tgt_ht,
+    tgt_col,
+    tot,
+    ft,
+    ct,
+    t_fm,
+    rt,
+  ) {
+    this.armed = a;
+    this.active = act;
+    this.other_miss = o_ms;
+    this.hit_miss = h_ms;
+    this.timeout = tout;
+    this.other_hits = o_ht;
+    this.target_hits = tgt_ht;
+    this.target_col = tgt_col;
+    this.total = tot;
+    this.frame_time = ft;
+    this.cycle_time = ct;
+    this.tot_frames = t_fm;
+    this.prop = rt;
+  }
+}
+
 //functions
 function loop() {
   if (active) {
@@ -104,7 +139,7 @@ function loop() {
         square1.erase();
         //col_on = false;
         if (!input) {
-          miss_counter++;
+          timeout++;
         }
         break;
       default:
@@ -113,15 +148,8 @@ function loop() {
     }
     frame = (frame + 1) % tot_frames;
     if (!armed) {
-      ctx.fillStyle = "white";
-      ctx.font = "50px serif";
+      print_stats();
       ctx.fillText("Test mode", 50, 90);
-      ctx.fillText("Target hits = " + target_hits, 50, 190);
-      ctx.fillText("Other hits = " + other_hits, 50, 240);
-      ctx.fillText("Misses = " + miss_counter, 50, 290);
-      ctx.fillText("Target = " + target_col, 50, 340);
-      ctx.fillText("Keys pressed = " + key_hit, 50, 390);
-      ctx.fillText("Total = " + total, 50, 440);
     }
   } else {
     square1.erase();
@@ -130,12 +158,7 @@ function loop() {
     ctx.fillText("Experience inactive", 50, 90);
     ctx.fillStyle = "white";
     ctx.fillText("Armed = " + armed, 50, 140);
-    ctx.fillText("Target hits = " + target_hits, 50, 190);
-    ctx.fillText("Other hits = " + other_hits, 50, 240);
-    ctx.fillText("Misses = " + miss_counter, 50, 290);
-    ctx.fillText("Target = " + target_col, 50, 340);
-    ctx.fillText("Keys pressed = " + key_hit, 50, 390);
-    ctx.fillText("Total = " + total, 50, 440);
+    print_stats();
     text_col_state = (text_col_state + 1) % text_col.length;
   }
   setTimeout(loop, frame_time);
@@ -150,6 +173,16 @@ function key_check(e) {
     case "Enter":
       active = !active;
       break;
+    case "CapsLock":
+      if (active) {
+        lap();
+      }
+      break;
+    case "r":
+      if (!active) {
+        reset();
+      }
+      break;
     default:
       check_col(false);
       break;
@@ -163,11 +196,11 @@ function check_col(is_target) {
         if (square1.col == target_col) {
           target_hits++;
         } else {
-          miss_counter++;
+          other_miss++;
         }
       } else {
         if (square1.col == target_col) {
-          miss_counter++;
+          hit_miss++;
         } else {
           other_hits++;
         }
@@ -175,6 +208,70 @@ function check_col(is_target) {
       input = true;
     }
   }
+}
+
+function reset() {
+  armed = false;
+  active = false;
+  col_on = false;
+  input = false;
+  other_miss = 0;
+  hit_miss = 0;
+  timeout = 0;
+  other_hits = 0;
+  target_hits = 0;
+  text_col_state = 0;
+  target_col = "red";
+  key_hit = 0;
+  total = 0;
+  frame_time = 250;
+  cycle_time = 1500;
+  tot_frames = cycle_time / frame_time;
+  prop = 13;
+}
+
+function change_time_values(ft, ct) {
+  frame_time = ft;
+  cycle_time = ct;
+  tot_frames = cycle_time / frame_time;
+}
+
+function lap() {
+  let save1 = new Save(
+    armed,
+    active,
+    other_miss,
+    hit_miss,
+    timeout,
+    other_hits,
+    target_hits,
+    target_col,
+    total,
+    frame_time,
+    cycle_time,
+    tot_frames,
+    prop,
+  );
+  results.push(save1);
+}
+
+function print_results() {
+  console.log(results);
+}
+
+function print_stats() {
+  ctx.fillStyle = "white";
+  ctx.font = "50px serif";
+  ctx.fillText("Target hits = " + target_hits, 50, 190);
+  ctx.fillText("Other hits = " + other_hits, 50, 240);
+  ctx.fillText("Hit misses = " + hit_miss, 50, 290);
+  ctx.fillText("Other misses = " + other_miss, 50, 340);
+  ctx.fillText("Timeout = " + timeout, 50, 390);
+  ctx.fillText("Target = " + target_col, 50, 440);
+  ctx.fillText("Keys pressed = " + key_hit, 50, 490);
+  ctx.fillText("Total = " + total, 50, 540);
+  ctx.fillText("Frame time = " + frame_time, 50, 590);
+  ctx.fillText("Cycle time = " + cycle_time, 50, 640);
 }
 
 //main
