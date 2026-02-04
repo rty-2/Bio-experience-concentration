@@ -12,36 +12,35 @@ const colors = [
   "lime",
   "teal",
   "turquoise",
-];
-const text_col = ["red", "white"];
+];//Liste des couleurs affichées.
+const text_col = ["red", "white"];//Liste des couleurs du texte.
 
 //variables
-let frame = 0;
-let active_color = "";
-let armed = false;
-let active = false;
-let col_on = false;
-let input = false;
-let other_miss = 0;
-let timeout = 0;
-let hit_miss = 0;
-let other_hits = 0;
-let target_hits = 0;
-let text_col_state = 0;
-let target_col = "red";
-let key_hit = 0;
-let total = 0;
-let frame_time = 250;
-let cycle_time = 1500;
-let tot_frames = cycle_time / frame_time;
-let prop = 13;
-let results = [];
+let frame = 0;//Index de l'image active
+let armed = false;//Mode de l'experience: False -> mode test;True -> mode experience
+let active = false;//Etat de l'experience
+let col_on = false;//Etat d'affichage du carré
+let input = false;//Indique si une entrée a été détectée
+let other_miss = 0;//Compte les fois ou le sujet tésté a appuyé sur espace alors qu'une autre couleur est affichée
+let timeout = 0;//Compte les fois ou l'utilisateur n'a pas appuyé sur une touche dans le temps imparti
+let hit_miss = 0;//Compte les fois ou l'utilisateur a appuyé sur une autre touche au lieu d'espace
+let other_hits = 0;//Compte les fois ou l'utilisateur a appuyé sur une autre touche et qu'il s'agissait d'une autre couleur 
+let target_hits = 0;//Compte les fois ou l'utilisateur a appuyé sur espace correctement
+let text_col_state = 0;//Etat de la couleur du texte
+let target_col = "red";//Couleur cible
+let key_hit = 0;//Nombres de fois qu'une touche a été préssée
+let total = 0;//Total de carré affichés
+let frame_time = 250;//Temps d'une image
+let cycle_time = 1500;//Temps d'un cycle
+let tot_frames = cycle_time / frame_time;//Nombre d'images par cycle
+let prop = 13;//Proportion de la dimension verticale occupée par le carré
+let results = [];//Tableau des résultats *ne marche pas*
 
-//cancas init
-let canvas = document.getElementById("screen");
-let ctx = canvas.getContext("2d");
-canvas.style.height = window.innerHeight + "px";
-canvas.style.width = window.innerWidth + "px";
+//canvas init
+let canvas = document.getElementById("screen");//Obtention de l'element de la page correspondant au canvas
+let ctx = canvas.getContext("2d");//Initialization du context
+canvas.style.height = window.innerHeight + "px";//Definition des dimensions du canvas (hauteur)
+canvas.style.width = window.innerWidth + "px";//Definition des dimensions du canvas (largeur)
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
