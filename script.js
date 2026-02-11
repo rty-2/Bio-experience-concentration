@@ -1,4 +1,4 @@
-//constants
+//constantes
 const colors = [
   "red",
   "green",
@@ -36,16 +36,16 @@ let tot_frames = cycle_time / frame_time;//Nombre d'images par cycle
 let prop = 13;//Proportion de la dimension verticale occupée par le carré
 let results = [];//Tableau des résultats *ne marche pas*
 
-//canvas init
+//initialisation du canvas
 let canvas = document.getElementById("screen");//Obtention de l'element de la page correspondant au canvas
 let ctx = canvas.getContext("2d");//Initialization du context
 canvas.style.height = window.innerHeight + "px";//Definition des dimensions du canvas (hauteur)
 canvas.style.width = window.innerWidth + "px";//Definition des dimensions du canvas (largeur)
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;//Taille afichée du canvas (hauteur de la page)
+canvas.width = window.innerWidth;//Taille afichée du canvas (largeur de la page)
 
-//classes
-class Square {
+//definition des classes
+class Square { // classe du carré affiché
   constructor(display, frac) {
     this.display = display;
     this.display_height = display.height;
